@@ -1,13 +1,15 @@
 package com.ferega.procrun
 
-import org.joda.time.DateTime
-import scala.concurrent.{ Await, Future }
-import scala.concurrent.duration._
-import scala.collection.JavaConversions._
-import scala.util.{ Failure, Success }
 import java.util.concurrent.TimeoutException
 
-class RunningProcess(pb: ProcessBuilder) {
+import org.joda.time.DateTime
+
+import scala.collection.JavaConversions._
+import scala.concurrent.{ Await, Future }
+import scala.concurrent.duration._
+import scala.util.{ Failure, Success }
+
+class RunningProcess private[procrun] (pb: ProcessBuilder) {
   private case class ProcessResult(endedAt: DateTime, exitCode: Int)
 
   private val startedAt = DateTime.now

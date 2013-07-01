@@ -1,6 +1,5 @@
 package com.ferega
 
-import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
 import scala.util.{ Failure, Success, Try }
 
