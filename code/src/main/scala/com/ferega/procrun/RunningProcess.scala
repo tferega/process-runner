@@ -34,6 +34,9 @@ class RunningProcess private[procrun] (pb: ProcessBuilder) {
 
   def end = waitFor(Duration.Zero)
 
+  def stdOutSoFar = outGobbler.bodySoFar
+  def stdErrSoFar = errGobbler.bodySoFar
+
   private def kill = {
     p.destroy
     tryt(Await.result(waiter, ReasonableTimeout)) match {
