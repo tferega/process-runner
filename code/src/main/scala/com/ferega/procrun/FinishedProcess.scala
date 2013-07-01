@@ -8,6 +8,6 @@ case class FinishedProcess(
     completedAt: DateTime,
     isKilled: Boolean,
     stdOut: String,
-    errOut: String,
+    stdErr: String,
     exitCode: Int) {
 }

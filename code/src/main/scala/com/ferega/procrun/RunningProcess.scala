@@ -10,15 +10,19 @@ import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
 
 class RunningProcess private[procrun] (pb: ProcessBuilder) {
-  private case class ProcessResult(endedAt: DateTime, exitCode: Int)
+  private case class ProcessResult(endedAt: DateTime, exitCode: Int, stdOut: String, stdErr: String)
 
   private val startedAt = DateTime.now
   private val p = pb.start
+  private val outGobbler = new StreamGobbler(p.getInputStream)
+  private val errGobbler = new StreamGobbler(p.getErrorStream)
 
   private val waiter = Future {
     val exitCode = p.waitFor
+    val stdOut = outGobbler.waitFor
+    val stdErr = errGobbler.waitFor
     val endedAt = DateTime.now
-    ProcessResult(endedAt, exitCode)
+    ProcessResult(endedAt, exitCode, stdOut, stdErr)
   }
 
   def waitFor(timeout: Duration) =
@@ -32,7 +36,7 @@ class RunningProcess private[procrun] (pb: ProcessBuilder) {
 
   private def kill = {
     p.destroy
-    tryt(Await.result(waiter, 10 seconds)) match {
+    tryt(Await.result(waiter, ReasonableTimeout)) match {
       case Success(pr)                  => report(pr, true)
       case Failure(e: TimeoutException) => throw new Exception("The process refused to die in a timely manner!", e)
       case Failure(e)                   => throw new Exception("An error occured during process execution!", e)
@@ -45,7 +49,7 @@ class RunningProcess private[procrun] (pb: ProcessBuilder) {
       startedAt   = startedAt,
       completedAt = pr.endedAt,
       isKilled    = isKilled,
-      stdOut      = "",
-      errOut      = "",
+      stdOut      = pr.stdOut,
+      stdErr      = pr.stdErr,
       exitCode    = pr.exitCode)
 }
