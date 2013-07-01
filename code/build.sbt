@@ -2,7 +2,7 @@ name := "ProcessRunner"
 
 organization := "com.ferega"
 
-version := "0.0.0"
+version := "0.0.0-SNAPSHOT"
 
 scalaVersion := "2.10.2"
 
@@ -38,3 +38,22 @@ libraryDependencies := Seq(
 unmanagedSourceDirectories in Compile <<= (scalaSource in Compile)(_ :: Nil)
 
 unmanagedSourceDirectories in Test := Nil
+
+
+
+// Publishing
+
+credentials += Credentials(Path.userHome / ".config" / "process-runner" / "nexus.config")
+
+crossScalaVersions := Seq("2.10.2")
+
+publishArtifact in (Compile, packageDoc) := false
+
+publishTo <<= (version) { version =>
+    Some(
+      if (version endsWith "SNAPSHOT")
+        "Element Snapshots" at "http://repo.element.hr/nexus/content/repositories/snapshots/"
+      else
+        "Element Releases" at "http://repo.element.hr/nexus/content/repositories/releases/"
+    )
+  }
