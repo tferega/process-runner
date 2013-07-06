@@ -9,26 +9,26 @@ scalaVersion := "2.10.2"
 autoScalaLibrary := false
 
 scalacOptions := Seq(
-  "-unchecked",
-  "-deprecation",
-  "-optimise",
-  "-encoding", "UTF-8",
-  // "-explaintypes",
-  "-Xcheckinit",
-  // "-Xfatal-warnings",
-  "-Yclosure-elim",
-  "-Ydead-code",
-  // "-Yinline",
-  // "-Yinline-warnings",
-  "-Xmax-classfile-name", "72",
-  "-Yrepl-sync",
-  "-Xlint",
-  "-Xverify",
-  "-Ywarn-all",
-  "-feature",
-  "-language:postfixOps",
-  "-language:implicitConversions",
-  "-language:existentials")
+    "-unchecked",
+    "-deprecation",
+    "-optimise",
+    "-encoding", "UTF-8",
+    // "-explaintypes",
+    "-Xcheckinit",
+    // "-Xfatal-warnings",
+    "-Yclosure-elim",
+    "-Ydead-code",
+    // "-Yinline",
+    // "-Yinline-warnings",
+    "-Xmax-classfile-name", "72",
+    "-Yrepl-sync",
+    "-Xlint",
+    "-Xverify",
+    "-Ywarn-all",
+    "-feature",
+    "-language:postfixOps",
+    "-language:implicitConversions",
+    "-language:existentials")
 
 libraryDependencies := Seq(
   "joda-time"      % "joda-time"      % "2.2",
@@ -45,7 +45,7 @@ unmanagedSourceDirectories in Test := Nil
 
 credentials += Credentials(Path.userHome / ".config" / "process-runner" / "nexus.config")
 
-crossScalaVersions := Seq("2.10.2")
+crossScalaVersions := Seq("2.10.2", "2.10.1", "2.10.0")
 
 publishArtifact in (Compile, packageDoc) := false
 
