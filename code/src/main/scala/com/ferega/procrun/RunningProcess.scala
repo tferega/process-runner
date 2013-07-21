@@ -32,7 +32,7 @@ class RunningProcess private[procrun] (pb: ProcessBuilder) {
       case Failure(e)                   => throw new Exception("An error occured during process execution!", e)
     }
 
-  def end = waitFor(Duration.Zero)
+  def end = waitFor(SmallTimeout)
 
   def stdOutSoFar = outGobbler.bodySoFar
   def stdErrSoFar = errGobbler.bodySoFar

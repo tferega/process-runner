@@ -8,9 +8,9 @@ import java.io.IOException
 class StreamGobbler(is: InputStream) {
   private case object Lock
 
-  var body = new StringBuilder
+  private var body = new StringBuilder
 
-  val gobbler = Future {
+  private val gobbler = Future {
     var end = false
     val ba: Array[Byte] = new Array(128)
 
