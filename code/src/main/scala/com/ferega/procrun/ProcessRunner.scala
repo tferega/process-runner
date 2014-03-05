@@ -5,7 +5,7 @@ import java.io.File
 import scala.collection.JavaConversions._
 import scala.concurrent.duration.Duration
 
-class ProcessRunner private (workingDir: Option[File], args: Seq[String]) {
+class ProcessRunner private (val workingDir: Option[File], val args: Seq[String]) extends Process {
   def this(workingDir: File, command: String) = this(Some(workingDir), Seq(command))
   def this(command: String)                   = this(None,             Seq(command))
   def this(workingDir: File, args: Seq[Any])  = this(Some(workingDir), args.map(_.toString))
@@ -17,6 +17,10 @@ class ProcessRunner private (workingDir: Option[File], args: Seq[String]) {
     case None     =>
   }
   pb.command(args)
+
+  val status = ProcessStatus.Created
+  val isRunning = false
+  val isStopped = false
 
   def run: RunningProcess = new RunningProcess(pb)
   def waitFor(timeout: Duration): FinishedProcess = run.waitFor(timeout)
