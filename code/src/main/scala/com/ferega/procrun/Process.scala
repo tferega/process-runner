@@ -7,5 +7,5 @@ trait Process {
 
   val args: Seq[String]
 
-  val command = args.headOption getOrElse ""
+  lazy val command = args.headOption getOrElse ""
 }

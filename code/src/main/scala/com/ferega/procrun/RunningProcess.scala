@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 import scala.collection.JavaConversions._
 import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
-import scala.util.{ Failure, Success }
+import scala.util.{ Try, Failure, Success }
 
 class RunningProcess private[procrun] (pb: ProcessBuilder) extends Process {
   private case class ProcessResult(endedAt: DateTime, exitCode: Int, stdOut: String, stdErr: String)
@@ -31,7 +31,7 @@ class RunningProcess private[procrun] (pb: ProcessBuilder) extends Process {
   val args = pb.command.toSeq
 
   def waitFor(timeout: Duration) =
-    tryt(Await.result(waiter, timeout)) match {
+    Try(Await.result(waiter, timeout)) match {
       case Success(pr)                  => report(pr, false)
       case Failure(e: TimeoutException) => kill
       case Failure(e)                   => throw new Exception("An error occured during process execution!", e)
@@ -43,7 +43,7 @@ class RunningProcess private[procrun] (pb: ProcessBuilder) extends Process {
 
   private def kill = {
     p.destroy
-    tryt(Await.result(waiter, ReasonableTimeout)) match {
+    Try(Await.result(waiter, ReasonableTimeout)) match {
       case Success(pr)                  => report(pr, true)
       case Failure(e: TimeoutException) => throw new Exception("The process refused to die in a timely manner!", e)
       case Failure(e)                   => throw new Exception("An error occured during process execution!", e)

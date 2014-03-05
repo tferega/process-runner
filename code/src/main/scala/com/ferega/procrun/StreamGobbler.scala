@@ -1,9 +1,9 @@
 package com.ferega.procrun
 
 import java.io.InputStream
+
 import scala.concurrent.{ Await, Future }
-import scala.util.{ Failure, Success }
-import java.io.IOException
+import scala.util.{ Try, Failure, Success }
 
 class StreamGobbler(is: InputStream) {
   private case object Lock
@@ -29,7 +29,7 @@ class StreamGobbler(is: InputStream) {
   }
 
   def waitFor = {
-    tryt(Await.result(gobbler, ReasonableTimeout)) match {
+    Try(Await.result(gobbler, ReasonableTimeout)) match {
       case Success(_) => body.result
       case Failure(e) => throw new Exception("An error occured while reading process output!", e)
     }

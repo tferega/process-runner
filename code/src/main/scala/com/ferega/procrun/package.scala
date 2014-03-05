@@ -2,7 +2,6 @@ package com.ferega
 
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
-import scala.util.{ Failure, Success, Try }
 
 package object procrun {
   private[procrun] implicit val ec = ExecutionContext.fromExecutor(java.util.concurrent.Executors.newCachedThreadPool())
@@ -17,10 +16,11 @@ package object procrun {
       case e: Exception => None
     }
 
-  private[procrun] def tryt[T](f: => T): Try[T] =
-    try {
-      Success(f)
-    } catch {
-      case e: Exception => Failure(e)
-    }
+  implicit class RichAny(l: Any) {
+    def |(r: Any) =
+      l match {
+        case seq: Seq[_] => seq :+ r
+        case _ => Seq(l, r)
+      }
+  }
 }
