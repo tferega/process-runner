@@ -9,7 +9,10 @@ import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
 import scala.util.{ Try, Failure, Success }
 
-class RunningProcess private[procrun] (pb: ProcessBuilder) extends Process {
+class RunningProcess private[procrun] (
+    pb: ProcessBuilder,
+    val command: String,
+    val arguments: Seq[Any]) extends Process {
   private case class ProcessResult(endedAt: DateTime, exitCode: Int, stdOut: String, stdErr: String)
 
   private val startedAt = DateTime.now
@@ -28,7 +31,6 @@ class RunningProcess private[procrun] (pb: ProcessBuilder) extends Process {
   def status  = if (waiter.isCompleted) ProcessStatus.Stopped else ProcessStatus.Running
   def isRunning = !waiter.isCompleted
   def isStopped = waiter.isCompleted
-  val args = pb.command.toSeq
 
   def waitFor(timeout: Duration) =
     Try(Await.result(waiter, timeout)) match {
@@ -52,7 +54,8 @@ class RunningProcess private[procrun] (pb: ProcessBuilder) extends Process {
 
   private def report(pr: ProcessResult, isKilled: Boolean) =
     FinishedProcess(
-      commandLine = pb.command.mkString(" "),
+      command     = command,
+      arguments   = arguments,
       startedAt   = startedAt,
       completedAt = pr.endedAt,
       isKilled    = isKilled,

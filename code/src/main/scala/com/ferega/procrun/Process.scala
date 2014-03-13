@@ -5,7 +5,9 @@ trait Process {
   def isRunning: Boolean
   def isStopped: Boolean
 
-  val args: Seq[String]
+  def command: String
+  def arguments: Seq[Any]
 
-  lazy val command = args.headOption getOrElse ""
+  def allArguments: Seq[String] = command +: arguments.map(_.toString)
+  def commandLine: String = allArguments.mkString(" ")
 }
