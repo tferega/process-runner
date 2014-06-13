@@ -1,59 +1,64 @@
 name := "ProcessRunner"
 
-organization := "com.ferega"
+organization := "com.ferega.procrun"
 
-version := "0.0.3-SNAPSHOT"
+version := "0.1.0"
 
-scalaVersion := "2.10.2"
-
-autoScalaLibrary := false
+scalaVersion := "2.11.1"
 
 scalacOptions := Seq(
-    "-unchecked",
-    "-deprecation",
-    "-optimise",
-    "-encoding", "UTF-8",
-    // "-explaintypes",
-    "-Xcheckinit",
-    // "-Xfatal-warnings",
-    "-Yclosure-elim",
-    "-Ydead-code",
-    // "-Yinline",
-    // "-Yinline-warnings",
-    "-Xmax-classfile-name", "72",
-    "-Yrepl-sync",
-    "-Xlint",
-    "-Xverify",
-    "-Ywarn-all",
-    "-feature",
-    "-language:postfixOps",
-    "-language:implicitConversions",
-    "-language:existentials")
+  "-deprecation",
+  "-encoding", "UTF-8",
+  "-feature",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+  "-language:postfixOps",
+  "-optimise",
+  "-unchecked",
+  "-Xcheckinit",
+  "-Xlint",
+  "-Xno-uescape",
+  "-Xverify",
+  "-Yclosure-elim",
+  "-Ydead-code",
+  "-Yinline"
+)
 
 libraryDependencies := Seq(
-  "joda-time"      % "joda-time"      % "2.2",
-  "org.joda"       % "joda-convert"   % "1.3.1",
-  "org.scala-lang" % "scala-library"  % "2.10.2")
+  "joda-time" % "joda-time"    % "2.3",
+  "org.joda"  % "joda-convert" % "1.6",
+  "org.scala-lang" % "scala-reflect" % scalaVersion.value)
 
-unmanagedSourceDirectories in Compile <<= (scalaSource in Compile)(_ :: Nil)
+unmanagedSourceDirectories in Compile := (scalaSource in Compile).value :: Nil
 
 unmanagedSourceDirectories in Test := Nil
 
-
-
 // Publishing
 
-credentials += Credentials(Path.userHome / ".config" / "process-runner" / "nexus.config")
-
-crossScalaVersions := Seq("2.10.2", "2.10.1", "2.10.0")
-
-publishArtifact in (Compile, packageDoc) := false
-
-publishTo <<= (version) { version =>
-    Some(
-      if (version endsWith "SNAPSHOT")
-        "Element Snapshots" at "http://repo.element.hr/nexus/content/repositories/snapshots/"
-      else
-        "Element Releases" at "http://repo.element.hr/nexus/content/repositories/releases/"
-    )
+publishTo := Some(
+  if (version.value endsWith "SNAPSHOT") {
+    Opts.resolver.sonatypeSnapshots
+  } else {
+    Opts.resolver.sonatypeStaging
   }
+)
+
+crossScalaVersions      := Seq("2.11.1", "2.10.4")
+
+publishMavenStyle       := true
+
+publishArtifact in Test := false
+
+pomIncludeRepository    := { _ => false }
+
+licenses                += ("MIT", url("http://opensource.org/licenses/MIT"))
+
+homepage                := Some(url("https://github.com/tferega/process-runner/"))
+
+credentials             += Credentials(Path.userHome / ".config" / "tferega.credentials")
+
+startYear               := Some(2013)
+
+scmInfo                 := Some(ScmInfo(url("https://github.com/tferega/process-runner/tree/0.1.0"), "scm:git:https://github.com/tferega/process-runner.git"))
+
+pomExtra                ~= (_ ++ {Developers.toXml})
