@@ -3,6 +3,7 @@ package com.ferega.procrun
 import org.joda.time.DateTime
 
 case class FinishedProcess(
+    name: String,
     command: String,
     arguments: Seq[Any],
     startedAt: DateTime,

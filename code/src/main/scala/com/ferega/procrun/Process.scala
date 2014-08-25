@@ -1,6 +1,8 @@
 package com.ferega.procrun
 
 trait Process {
+  def name: String
+
   def status: ProcessStatus
   def isRunning: Boolean
   def isStopped: Boolean

@@ -6,13 +6,14 @@ import scala.collection.JavaConversions._
 import scala.concurrent.duration.Duration
 
 class ProcessRunner private (
+    val name: String,
     val workingDir: Option[File],
     val command: String,
     val arguments: Seq[Any]) extends Process {
-  def this(workingDir: File, command: String)                      = this(Some(workingDir), command, Seq.empty)
-  def this(command: String)                                        = this(None,             command, Seq.empty)
-  def this(workingDir: File, command: String, arguments: Seq[Any]) = this(Some(workingDir), command, arguments)
-  def this(command: String, arguments: Seq[Any])                   = this(None,             command, arguments)
+  def this(name: String, workingDir: File, command: String)                      = this(name, Some(workingDir), command, Seq.empty)
+  def this(name: String, command: String)                                        = this(name, None,             command, Seq.empty)
+  def this(name: String, workingDir: File, command: String, arguments: Seq[Any]) = this(name, Some(workingDir), command, arguments)
+  def this(name: String, command: String, arguments: Seq[Any])                   = this(name, None,             command, arguments)
 
   private val pb = new ProcessBuilder
   workingDir match {
@@ -25,7 +26,7 @@ class ProcessRunner private (
   val isRunning = false
   val isStopped = false
 
-  def run: RunningProcess = new RunningProcess(pb, command, arguments)
+  def run: RunningProcess = new RunningProcess(pb, name, command, arguments)
   def waitFor(timeout: Duration): FinishedProcess = run.waitFor(timeout)
   def end: FinishedProcess = run.end
 }

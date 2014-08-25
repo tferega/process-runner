@@ -11,6 +11,7 @@ import scala.util.{ Try, Failure, Success }
 
 class RunningProcess private[procrun] (
     pb: ProcessBuilder,
+    val name: String,
     val command: String,
     val arguments: Seq[Any]) extends Process {
   private case class ProcessResult(endedAt: DateTime, exitCode: Int, stdOut: String, stdErr: String)
@@ -54,6 +55,7 @@ class RunningProcess private[procrun] (
 
   private def report(pr: ProcessResult, isKilled: Boolean) =
     FinishedProcess(
+      name        = name,
       command     = command,
       arguments   = arguments,
       startedAt   = startedAt,
