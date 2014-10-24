@@ -5,6 +5,10 @@ import java.io.InputStream
 import scala.concurrent.{ Await, Future }
 import scala.util.{ Try, Failure, Success }
 
+/** Consumes the specified `InputStream` until it stops producing output.
+ *
+ *  Also, allows to peek at consumed output at any time.
+ */
 class StreamGobbler(is: InputStream) {
   private case object Lock
 
@@ -28,6 +32,11 @@ class StreamGobbler(is: InputStream) {
     }
   }
 
+  /** Waits a "reasonable" amount of time for the stream to stop producing
+   *  output.
+   *
+   *  @return Consumed output
+   */
   def waitFor = {
     Try(Await.result(gobbler, ReasonableTimeout)) match {
       case Success(_) => body.result
@@ -35,6 +44,7 @@ class StreamGobbler(is: InputStream) {
     }
   }
 
+  /** Returns output cosumed so far. */
   def bodySoFar =
     Lock.synchronized {
       body.result

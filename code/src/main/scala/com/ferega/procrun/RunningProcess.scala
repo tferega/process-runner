@@ -9,11 +9,12 @@ import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
 import scala.util.{ Try, Failure, Success }
 
+/** Represents a running process. */
 class RunningProcess private[procrun] (
     pb: ProcessBuilder,
-    val name: String,
-    val command: String,
-    val arguments: Seq[Any]) extends Process {
+    override val name: String,
+    override val command: String,
+    override val arguments: Seq[Any]) extends Process {
   private case class ProcessResult(endedAt: DateTime, exitCode: Int, stdOut: String, stdErr: String)
 
   private val startedAt = DateTime.now
@@ -29,19 +30,45 @@ class RunningProcess private[procrun] (
     ProcessResult(endedAt, exitCode, stdOut, stdErr)
   }
 
-  def status  = if (waiter.isCompleted) ProcessStatus.Stopped else ProcessStatus.Running
-  def isRunning = !waiter.isCompleted
-  def isStopped = waiter.isCompleted
+  override def status  = if (waiter.isCompleted) ProcessStatus.Stopped else ProcessStatus.Running
+  override def isRunning = !waiter.isCompleted
+  override def isStopped = waiter.isCompleted
 
-  def waitFor(timeout: Duration) =
+  /** Waits at most `timeout` for this process to end.
+   *
+   *  @param timeout Specifies the `scala.concurrent.duration.Duration` to wait for the process to end.
+   *
+   *  This call will block until the process ends, or a timeout occurs. In the
+   *  case of a timeout, the process is destroyed.
+   *
+   *  @return Result of running this process
+   */
+  def waitFor(timeout: Duration): FinishedProcess =
     Try(Await.result(waiter, timeout)) match {
       case Success(pr)                  => report(pr, false)
       case Failure(e: TimeoutException) => kill
       case Failure(e)                   => throw new Exception("An error occured during process execution!", e)
     }
 
+  /** Waits a "small" amount of time for this process to end.
+   *
+   *  This call will block until the process ends, or a "small" (500 ms) timeout
+   *  occurs. In the case of a timeout, the process is destroyed.
+   *
+   *  @return Result of running this process
+   */
   def end = waitFor(SmallTimeout)
+
+  /** Gets the standard output this process has produced so far.
+   *
+   *  @return Standard output of this process
+   */
   def stdOutSoFar = outGobbler.bodySoFar
+
+  /** Gets the standard error this process has produced so far.
+   *
+   *  @return Standard error of this process
+   */
   def stdErrSoFar = errGobbler.bodySoFar
 
   private def kill = {
