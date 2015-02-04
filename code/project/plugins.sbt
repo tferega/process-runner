@@ -6,7 +6,7 @@
 // | See also: Scala IDE downloads (http://download.scala-ide.org/)                      |
 // +-------------------------------------------------------------------------------------+
 
-addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.5.0")
+addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "3.0.0")
 
 // +-------------------------------------------------------------------------------------+
 // | Dependency graph SBT plugin (https://github.com/jrudolph/sbt-dependency-graph)      |
@@ -20,4 +20,4 @@ addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.7.4")
 // | Provided PGP signing for published artifacts.                                       |
 // +-------------------------------------------------------------------------------------+
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8.3")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")

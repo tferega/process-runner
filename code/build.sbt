@@ -2,9 +2,9 @@ name := "ProcessRunner"
 
 organization := "com.ferega.procrun"
 
-version := "0.1.2"
+version := "0.1.3"
 
-scalaVersion := "2.11.2"
+scalaVersion := "2.11.5"
 
 scalacOptions := Seq(
   "-deprecation",
@@ -25,7 +25,7 @@ scalacOptions := Seq(
 )
 
 libraryDependencies := Seq(
-  "joda-time" % "joda-time"    % "2.4",
+  "joda-time" % "joda-time"    % "2.7",
   "org.joda"  % "joda-convert" % "1.7",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value)
 
@@ -43,7 +43,7 @@ publishTo := Some(
   }
 )
 
-crossScalaVersions      := Seq("2.11.2", "2.10.4")
+crossScalaVersions      := Seq("2.11.5", "2.10.4")
 
 publishMavenStyle       := true
 
@@ -59,6 +59,6 @@ credentials             += Credentials(Path.userHome / ".config" / "tferega.cred
 
 startYear               := Some(2013)
 
-scmInfo                 := Some(ScmInfo(url("https://github.com/tferega/process-runner/tree/0.1.1"), "scm:git:https://github.com/tferega/process-runner.git"))
+scmInfo                 := Some(ScmInfo(url("https://github.com/tferega/process-runner/tree/0.1.2"), "scm:git:https://github.com/tferega/process-runner.git"))
 
 pomExtra                ~= (_ ++ {Developers.toXml})
