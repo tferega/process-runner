@@ -1,9 +1,8 @@
 package com.ferega.procrun
 
 import java.io.InputStream
-
 import scala.concurrent.{ Await, Future }
-import scala.util.{ Try, Failure, Success }
+import scala.util.{ Failure, Success, Try }
 
 /** Consumes the specified `InputStream` until it stops producing output.
  *
@@ -12,7 +11,7 @@ import scala.util.{ Try, Failure, Success }
 class StreamGobbler(is: InputStream) {
   private case object Lock
 
-  private var body = new StringBuilder
+  private val body = new StringBuilder
 
   private val gobbler = Future {
     var end = false
@@ -40,11 +39,11 @@ class StreamGobbler(is: InputStream) {
   def waitFor = {
     Try(Await.result(gobbler, ReasonableTimeout)) match {
       case Success(_) => body.result
-      case Failure(e) => throw new Exception("An error occured while reading process output!", e)
+      case Failure(e) => throw new Exception("An error occurred while reading process output!", e)
     }
   }
 
-  /** Returns output cosumed so far. */
+  /** Returns output consumed so far. */
   def bodySoFar =
     Lock.synchronized {
       body.result

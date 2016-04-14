@@ -1,13 +1,10 @@
 package com.ferega.procrun
 
 import java.util.concurrent.TimeoutException
-
 import org.joda.time.DateTime
-
-import scala.collection.JavaConversions._
 import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
-import scala.util.{ Try, Failure, Success }
+import scala.util.{ Failure, Success, Try }
 
 /** Represents a running process. */
 class RunningProcess private[procrun] (
@@ -45,9 +42,9 @@ class RunningProcess private[procrun] (
    */
   def waitFor(timeout: Duration): FinishedProcess =
     Try(Await.result(waiter, timeout)) match {
-      case Success(pr)                  => report(pr, false)
+      case Success(pr)                  => report(pr, isKilled = false)
       case Failure(e: TimeoutException) => kill
-      case Failure(e)                   => throw new Exception("An error occured during process execution!", e)
+      case Failure(e)                   => throw new Exception("An error occurred during process execution!", e)
     }
 
   /** Waits a "small" amount of time for this process to end.
@@ -72,11 +69,11 @@ class RunningProcess private[procrun] (
   def stdErrSoFar = errGobbler.bodySoFar
 
   private def kill = {
-    p.destroy
+    p.destroy()
     Try(Await.result(waiter, ReasonableTimeout)) match {
-      case Success(pr)                  => report(pr, true)
+      case Success(pr)                  => report(pr, isKilled = true)
       case Failure(e: TimeoutException) => throw new Exception("The process refused to die in a timely manner!", e)
-      case Failure(e)                   => throw new Exception("An error occured during process execution!", e)
+      case Failure(e)                   => throw new Exception("An error occurred during process execution!", e)
     }
   }
 

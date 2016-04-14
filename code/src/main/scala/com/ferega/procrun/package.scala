@@ -7,7 +7,7 @@ import scala.concurrent.ExecutionContext
  *
  *  Supported actions are:
  *    - Uses `java.lang.ProcessBuilder` in the background
- *    - Process managment is asynchronous
+ *    - Process management is asynchronous
  *    - Collects process output (both stdout and stderr), which can be fetched during execution
  *    - Processes can be destroyed
  *    - Can wait for a process to finish (with a timeout)

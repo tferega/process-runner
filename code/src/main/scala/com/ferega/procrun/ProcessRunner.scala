@@ -1,7 +1,6 @@
 package com.ferega.procrun
 
 import java.io.File
-
 import scala.collection.JavaConversions._
 import scala.concurrent.duration.Duration
 
