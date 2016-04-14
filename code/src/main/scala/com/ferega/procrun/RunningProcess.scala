@@ -18,6 +18,7 @@ class RunningProcess private[procrun] (
   private val p = pb.start
   private val outGobbler = new StreamGobbler(p.getInputStream)
   private val errGobbler = new StreamGobbler(p.getErrorStream)
+  private val writer = p.getOutputStream
 
   private val waiter = Future {
     val exitCode = p.waitFor
@@ -55,6 +56,23 @@ class RunningProcess private[procrun] (
    *  @return Result of running this process
    */
   def end = waitFor(SmallTimeout)
+
+  /** Writes to the standard input of this process.
+   *
+   *  @param in String to write
+   */
+  def writeToStdIn(in: String): Unit = {
+    writeToStdIn(in.getBytes("UTF-8"))
+  }
+
+  /** Writes to the standard input of this process.
+   *
+   *  @param in Byte array to write
+   */
+  def writeToStdIn(in: Array[Byte]): Unit = {
+    writer.write(in)
+    writer.flush()
+  }
 
   /** Gets the standard output this process has produced so far.
    *
