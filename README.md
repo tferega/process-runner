@@ -5,20 +5,20 @@ A simple Scala library for no-fuss process runnning.
 
 Installation
 ------------
-To include process-runner in your project, add the following line to your `build.sbt`:
+To include _process-runner_ in your project, add the following line to your `build.sbt`:
 
 ```scala
 libraryDependencies += "com.ferega.procrun" %% "processrunner" % "0.1.5"
 ```
 
-It is published for Scala `2.11` `2.10`.
+It is published for Scala `2.11` and `2.10`.
 
 
 Features
 --------
   * Uses `java.lang.ProcessBuilder` in the background
   * Process managment is asynchronous
-  * Collects process output (both `stdout` and `stderr`), which can be fetched at any time during execution
+  * Collects process output (both `stdout` and `stderr`), which can be fetched at any time during or after execution
   * Provides an easy way to write to process `stdin`
   * Processes can be destroyed
   * Can wait for a process to finish (with a timeout)
@@ -50,7 +50,7 @@ def listFolder(folder: File): String =
 
 Generating a calendar (Linux):
 
-```
+```scala
 // Runs `cal` with specified year and month and returns generated calendar if
 // successful (from stdout). Otherwise, returns error description (from stderr).
 import com.ferega.procrun._
