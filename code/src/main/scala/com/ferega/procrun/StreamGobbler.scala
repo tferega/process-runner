@@ -1,14 +1,14 @@
 package com.ferega.procrun
 
 import java.io.InputStream
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /** Consumes the specified `InputStream` until it stops producing output.
  *
  *  Also, allows to peek at consumed output at any time.
  */
-class StreamGobbler(is: InputStream) {
+private class StreamGobbler(is: InputStream)(implicit ev: ExecutionContext) {
   private case object Lock
 
   private val body = new StringBuilder

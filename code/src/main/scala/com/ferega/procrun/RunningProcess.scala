@@ -1,8 +1,8 @@
 package com.ferega.procrun
 
-import java.util.concurrent.TimeoutException
+import java.util.concurrent.{ TimeoutException, TimeUnit }
 import org.joda.time.DateTime
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success, Try }
 
@@ -13,6 +13,9 @@ class RunningProcess private[procrun] (
     override val command: String,
     override val arguments: Seq[Any]) extends Process {
   private case class ProcessResult(endedAt: DateTime, exitCode: Int, stdOut: String, stdErr: String)
+
+  private val executor = java.util.concurrent.Executors.newFixedThreadPool(3)
+  private implicit val ec = ExecutionContext.fromExecutor(executor)
 
   private val startedAt = DateTime.now
   private val p = pb.start
@@ -41,12 +44,18 @@ class RunningProcess private[procrun] (
    *
    *  @return Result of running this process
    */
-  def waitFor(timeout: Duration): FinishedProcess =
-    Try(Await.result(waiter, timeout)) match {
-      case Success(pr)                  => report(pr, isKilled = false)
-      case Failure(e: TimeoutException) => kill
-      case Failure(e)                   => throw new Exception("An error occurred during process execution!", e)
+  def waitFor(timeout: Duration): FinishedProcess = {
+    try {
+      Try(Await.result(waiter, timeout)) match {
+        case Success(pr)                  => report(pr, isKilled = false)
+        case Failure(e: TimeoutException) => kill
+        case Failure(e)                   => throw new Exception("An error occurred during process execution!", e)
+      }
+    } finally {
+      executor.shutdown()
+      executor.awaitTermination(ReasonableTimeout.toMillis, TimeUnit.MILLISECONDS)
     }
+  }
 
   /** Waits a "small" amount of time for this process to end.
    *

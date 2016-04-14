@@ -1,7 +1,6 @@
 package com.ferega
 
 import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext
 
 /** Provides classes and methods for native process manipulation.
  *
@@ -42,8 +41,6 @@ import scala.concurrent.ExecutionContext
  *  }}}
  */
 package object procrun {
-  private[procrun] implicit val ec = ExecutionContext.fromExecutor(java.util.concurrent.Executors.newCachedThreadPool())
-
   private[procrun] val ReasonableTimeout = 10  seconds
   private[procrun] val SmallTimeout      = 500 millis
 
