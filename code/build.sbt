@@ -2,7 +2,7 @@ name := "ProcessRunner"
 
 organization := "com.ferega.procrun"
 
-version := "0.1.3"
+version := "0.1.5"
 
 scalaVersion := "2.11.8"
 
@@ -59,6 +59,6 @@ credentials             += Credentials(Path.userHome / ".config" / "tferega.cred
 
 startYear               := Some(2013)
 
-scmInfo                 := Some(ScmInfo(url("https://github.com/tferega/process-runner/tree/0.1.2"), "scm:git:https://github.com/tferega/process-runner.git"))
+scmInfo                 := Some(ScmInfo(url(s"https://github.com/tferega/process-runner/tree/${version.value}"), "scm:git:https://github.com/tferega/process-runner.git"))
 
 pomExtra                ~= (_ ++ {Developers.toXml})

@@ -8,7 +8,7 @@ Installation
 ------------
 To include process-runner in your project, add the following line to your `build.sbt`:
 ```
-libraryDependencies += "com.ferega.procrun" %% "processrunner" % "0.1.2"
+libraryDependencies += "com.ferega.procrun" %% "processrunner" % "0.1.5"
 ```
 It is published for Scala `2.11` and Scala `2.10`.
 
