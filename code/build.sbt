@@ -4,7 +4,7 @@ organization := "com.ferega.procrun"
 
 version := "0.1.3"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.8"
 
 scalacOptions := Seq(
   "-deprecation",
@@ -25,8 +25,8 @@ scalacOptions := Seq(
 )
 
 libraryDependencies := Seq(
-  "joda-time" % "joda-time"    % "2.7",
-  "org.joda"  % "joda-convert" % "1.7",
+  "joda-time" % "joda-time"    % "2.9.3",
+  "org.joda"  % "joda-convert" % "1.8.1",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value)
 
 unmanagedSourceDirectories in Compile := (scalaSource in Compile).value :: Nil
@@ -43,7 +43,7 @@ publishTo := Some(
   }
 )
 
-crossScalaVersions      := Seq("2.11.5", "2.10.4")
+crossScalaVersions      := Seq("2.11.8", "2.10.6")
 
 publishMavenStyle       := true
 
