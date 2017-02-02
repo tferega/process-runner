@@ -2,9 +2,9 @@ name := "ProcessRunner"
 
 organization := "com.ferega.procrun"
 
-version := "0.1.5"
+version := "0.1.6"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 
 scalacOptions := Seq(
   "-deprecation",
@@ -13,19 +13,15 @@ scalacOptions := Seq(
   "-language:higherKinds",
   "-language:implicitConversions",
   "-language:postfixOps",
-  "-optimise",
   "-unchecked",
   "-Xcheckinit",
   "-Xlint",
   "-Xno-uescape",
-  "-Xverify",
-  "-Yclosure-elim",
-  "-Ydead-code",
-  "-Yinline"
+  "-Xverify"
 )
 
 libraryDependencies := Seq(
-  "joda-time" % "joda-time"    % "2.9.3",
+  "joda-time" % "joda-time"    % "2.9.7",
   "org.joda"  % "joda-convert" % "1.8.1",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value)
 

@@ -1,7 +1,7 @@
 package com.ferega.procrun
 
 import java.io.File
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.concurrent.duration.Duration
 
 /** Main class used for starting a process. */
@@ -52,7 +52,7 @@ class ProcessRunner private (
     case Some(wd) => pb.directory(wd)
     case None     =>
   }
-  pb.command(allArguments)
+  pb.command(allArguments.asJava)
 
   override val status = ProcessStatus.Created
   override val isRunning = false
